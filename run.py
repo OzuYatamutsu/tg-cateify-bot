@@ -7,7 +7,7 @@ from logger import log
 def on_inline_query(bot, update) -> None:
     # Forward the query to the controller method and respond
     update.inline_query.answer(
-        query_text=generate_cate_response(update.inline_query.query)
+        generate_cate_response(query_text=update.inline_query.query)
     )
 
 
@@ -17,11 +17,12 @@ def start():
     bot = Updater(token=API_KEY)
     dp = bot.dispatcher
     dp.add_handler(InlineQueryHandler(on_inline_query))
+    log.info("Bot ready, dood!")
     bot.start_polling()
     bot.idle()
-    log.info("Bot ready, dood!")
+
 
 if __name__ == '__main__':
     start()
 
-print("TEST")
+

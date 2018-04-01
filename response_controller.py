@@ -1,4 +1,5 @@
 from config import CATE_API_ENDPOINT
+from logger import log
 from helpers import inline_query_transform
 from requests import get
 
@@ -12,10 +13,12 @@ def generate_cate_response(query_text: str) -> list:
     try:
         result = get("{api_base_url}/{query}".format(
             api_base_url=CATE_API_ENDPOINT, query=query_text
-        )).content
+        )).content.decode("utf-8")
     except Exception as e:
         result = "Error generatin' response, dood! {error}".format(
             error=str(e)
         )
 
-    return inline_query_transform(result)
+        log.error(e)
+
+    return inline_query_transform(response_text=result)
