@@ -1,5 +1,7 @@
 from response_controller import generate_cate_response
 from unittest import TestCase
+from urllib.parse import quote 
+
 
 class TestResponseController(TestCase):
     def setUp(self):
@@ -23,8 +25,8 @@ class TestResponseController(TestCase):
         )
 
     def test_generate_cate_response_symbolic(self):
-        query_text = "!@#$%^&*()-=\"';:[]{}\\~`,.<>/?"
-        expected = "！＠＃＄％＾＆＊（）－＝＼＂＇；：［］｛｝＼＼～｀，．＜＞／？"
+        query_text = quote("!@#$%^&*()-=\"';:[]{}\\~`,.<>?", safe='')  # / is not okay, thanks apache/Flask
+        expected = "！＠＃＄％＾＆＊（）－＝＂＇；：［］｛｝＼～｀，．＜＞？"
 
         self.assertEqual(
             generate_cate_response(query_text), expected

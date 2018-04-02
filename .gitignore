@@ -104,3 +104,4 @@ ENV/
 cateify_bot.log
 
 *.swp
+*.swo
