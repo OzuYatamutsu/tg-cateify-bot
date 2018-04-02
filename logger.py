@@ -1,5 +1,7 @@
-from logging import getLogger # , StreamHandler
-#from sys import stdout
+from logging import getLogger, StreamHandler, FileHandler, DEBUG
+from sys import stdout
 
 log = getLogger(__name__)
-# log.addHandler(StreamHandler(stdout))
+log.setLevel(DEBUG)
+log.addHandler(StreamHandler(stdout))
+log.addHandler(FileHandler('cateify_bot.log'))
