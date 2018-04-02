@@ -33,7 +33,6 @@ def on_message_text(bot, update) -> None:
         return
 
     bot.send_chat_action(user_id, ChatAction.TYPING)
-    generate_cate_response(update.message)
 
     bot.sendMessage(
         chat_id=user_id,
