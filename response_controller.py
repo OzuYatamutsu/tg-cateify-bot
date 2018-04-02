@@ -16,7 +16,16 @@ def generate_cate_response(query_text: str) -> str:
     try:
         result = get("{api_base_url}/{query}".format(
             api_base_url=CATE_API_ENDPOINT, query=query_text
-        )).content.decode("utf-8")
+        ))
+
+        if result.status_code != 200:
+            log.warning(
+                "API returned a non-200 status code: %s. Returning nothing.",
+                result.status_code
+            )
+            return ''
+
+        result = result.content.decode("utf-8")
 
         # Now put the special characters back
         if special_char_locations:
@@ -35,6 +44,7 @@ def generate_cate_response(query_text: str) -> str:
 
     return result
 
+
 def _index_special_chars(query_text: str) -> dict:
     """
     Given a query string with mixed characters, returns a
@@ -43,12 +53,13 @@ def _index_special_chars(query_text: str) -> dict:
 
     # Definition of "special character" is anything
     # outside the BASIC LATIN Unicode range (> 0x007F).
-    outside_of_range = lambda char: ord(char) > 127
+    def outside_of_range(char):
+        return ord(char) > 127
+
     result_map = {}
-    
+
     for index in range(len(query_text)):
         if outside_of_range(query_text[index]):
             result_map[index] = query_text[index]
 
     return result_map
-
