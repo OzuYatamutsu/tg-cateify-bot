@@ -5,7 +5,7 @@ python:
 before_install:
     - sudo apt-get install python3-pip
 install:
-    - pipe install --user -r requirements.txt
+    - pip3 install --user -r requirements.txt
 script:
     - python3 -m unittest
 
