@@ -1,6 +1,5 @@
 from config import CATE_API_ENDPOINT
 from logger import log
-from helpers import inline_query_transform
 from requests import get
 
 
