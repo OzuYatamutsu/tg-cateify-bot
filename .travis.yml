@@ -2,9 +2,10 @@ language: python3
 sudo: enabled
 python:
     - 3.6
+before_install:
+    - sudo apt-get install python3-pip
 install:
-    - sudo pip install -r requirements.txt
+    - pipe install --user -r requirements.txt
 script:
-    - flake8 *.py
     - python3 -m unittest
 
