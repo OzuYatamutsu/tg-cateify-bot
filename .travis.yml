@@ -5,5 +5,5 @@ python:
 install:
     - sudo pip install -r requirements.txt
 script:
-    - python -m unittest
+    - python3 -m unittest
 
