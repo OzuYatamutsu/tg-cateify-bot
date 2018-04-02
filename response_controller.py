@@ -21,4 +21,5 @@ def generate_cate_response(query_text: str) -> list:
 
         log.error(e)
 
-    return inline_query_transform(response_text=result)
+    return result
+

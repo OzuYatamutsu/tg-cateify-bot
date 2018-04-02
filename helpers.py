@@ -15,3 +15,4 @@ def inline_query_transform(response_text: str, title=None) -> list:
             input_message_content=InputTextMessageContent(response_text)
         )
     ]
+
