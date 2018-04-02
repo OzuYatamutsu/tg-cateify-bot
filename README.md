@@ -6,7 +6,7 @@ It takes text that `looks like this` and responds with text that `ｌｏｏｋ�
 
 ## To use it
 ```
-@cateifybot <message>
+@cateify_bot <message>
 ```
 
 ## Or, if you want to run it yourself
