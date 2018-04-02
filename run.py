@@ -15,6 +15,7 @@ def on_inline_query(bot, update) -> None:
     query_text: str = update.inline_query.query
 
     if not query_text:
+        update.inline_query.answer(inline_query_transform(''))
         return
 
     log.debug('Cateifying: "{text}" from user {username} ({id})'.format(
