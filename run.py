@@ -1,8 +1,11 @@
 from logger import log
-from telegram.ext import Updater, InlineQueryHandler, MessageHandler, CommandHandler, Filters
-from telegram import ParseMode, ChatAction
 from config import API_KEY
-from helpers import inline_query_transform
+from handlers import (
+    on_command_start, on_command_help, on_message_text, on_inline_query
+)
+from telegram.ext import (
+    Updater, InlineQueryHandler, MessageHandler, CommandHandler, Filters
+)
 
 
 def start():
