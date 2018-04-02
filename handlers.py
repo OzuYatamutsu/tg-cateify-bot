@@ -1,86 +1,90 @@
-from logger import log
-from telegram.ext import Updater, InlineQueryHandler, MessageHandler, CommandHandler, Filters
-from telegram import ParseMode, ChatAction
-from helpers import inline_query_transform
+from logger import log_cateify, log_command
+from helpers import inline_query_transform, get_meta_from_update
 from response_controller import generate_cate_response
+from telegram import ParseMode, ChatAction
 
 
+@log_cateify
 def on_inline_query(bot, update) -> None:
     """
     Forward the query to the controller method and respond
     """
 
-    query_username: str = update.effective_user.username
-    query_user_id = str(update.effective_user.id)
-    query_text: str = update.inline_query.query
+    username, user_id, query_text = get_meta_from_update(update)
 
     if not query_text:
         update.inline_query.answer(inline_query_transform(''))
         return
 
-    log_cateify(username=query_username, user_id=query_user_id, text=query_text)
-
     update.inline_query.answer(inline_query_transform(
-        generate_cate_response(query_text=update.inline_query.query)
+        generate_cate_response(query_text=query_text)
     ))
 
+
+@log_cateify
 def on_message_text(bot, update) -> None:
     """
     Forward the message text to the controller method and respond
     """
 
-    message_username: str = update.effective_user.username
-    message_user_id = str(update.effective_user.id)
-    message_text: str = update.message.text
+    username, user_id, message_text = get_meta_from_update(update)
 
     if not message_text:
         return
 
-    log_cateify(username=message_username, user_id=message_user_id, text=message_text)
-
-    bot.send_chat_action(message_user_id, ChatAction.TYPING)
+    bot.send_chat_action(user_id, ChatAction.TYPING)
     generate_cate_response(update.message)
 
-    bot.sendMessage(chat_id=message_user_id, parse_mode=ParseMode.MARKDOWN,
-                    text=generate_cate_response(query_text=message_text))
+    bot.sendMessage(
+        chat_id=user_id,
+        parse_mode=ParseMode.MARKDOWN,
+        text=generate_cate_response(query_text=message_text)
+    )
 
+
+@log_command
 def on_command_start(bot, update):
     """
-    Welcomes the user to Cateify Bot
+    Welcomes the user to Cateify bot!
     """
 
-    message_username: str = update.effective_user.username
-    message_user_id = str(update.effective_user.id)
-    message_text: str = update.message.text
+    WELCOME_STICKER_ID = "CAADAQADBQADw8wxE34vqjVrXNMoAg"
+    WELCOME_MESSAGE_TEXT = (
+        "Ｈｅｗｗｏ！！ (=ↀωↀ=)✧ ；；"
+        "\nＷｅｌｃｏｍｅ ｔｏ Ｊｉｎｈａｉ\'ｓ Ｃａｔｅｉｆｙ Ｂｏｔ"
+        "\n\nＦｏｒ ｍｏｒｅ ｉｎｆｏ, ｔｒｙ: /help"
+    )
 
-    log_command(username=message_username, user_id=message_user_id, command=message_text)
+    username, user_id, message_text = get_meta_from_update(update)
 
-    bot.send_chat_action(message_user_id, ChatAction.TYPING)
+    bot.send_chat_action(user_id, ChatAction.TYPING)
+    bot.sendSticker(
+        chat_id=user_id, sticker=WELCOME_STICKER_ID, disable_notification=True
+    )
+    bot.sendMessage(
+        chat_id=user_id, parse_mode=ParseMode.MARKDOWN,
+        text=WELCOME_MESSAGE_TEXT
+    )
 
-    bot.sendSticker(chat_id=message_user_id, sticker="CAADAQADBQADw8wxE34vqjVrXNMoAg", disable_notification=True)
-    bot.sendMessage(chat_id=message_user_id, parse_mode=ParseMode.MARKDOWN,
-                    text='Ｈｅｗｗｏ！！ (=ↀωↀ=)✧ ；；'
-                    '\nＷｅｌｃｏｍｅ ｔｏ Ｊｉｎｈａｉ\'ｓ Ｃａｔｅｉｆｙ Ｂｏｔ'
-                    '\n\nＦｏｒ ｍｏｒｅ ｉｎｆｏ, ｔｒｙ: /help'
-                    )
 
+@log_command
 def on_command_help(bot, update):
     """
-    Provides the user with information about the bot
+    Provides the user with information about the bot.
     """
-    message_username: str = update.effective_user.username
-    message_user_id = str(update.effective_user.id)
-    message_text: str = update.message.text
 
-    log_command(username=message_username, user_id=message_user_id, command=message_text)
+    HELP_COMMAND_TEXT = (
+        "Ｔｏ ｕｓｅ ｉｎｗｉｎｅ ｑｗｕｅｒｉｅｓ，ｐｗｅａｓｅ ｕｓｅ ｔｈｅ ｆｏｗｗｏｗｉｎｇ ｆｏｒｍａｔ:"   # noqa 
+        "\n＠ｃａｔｅｉｆｙ＿ｂｏｔ ｙｏｕｒｍｅｓｓａｇｅｔｅｘｔｈｅｒｅ"
+        "\nｔｈｅｎ ｓｅｗｅｃｔ ｙｏｕｒ ｏｐｔｉｏｎ ｆｗｏｍ ｔｈｅ ｄｗｏｐｄｏｗｎ ｍｅｎｕ！！ o3o;;"
+        "\n\nＹｏｕ ｃａｎ ａｌｓｏ ｊｕｓｔ ｐｗｉｖａｔｅｗｙ ｍｅｓｓａｇｅ ｍｅ， ｏｒ ｒｅｐｗｙ ｔｏ ｍｅ ｉｎ ｇｗｏｕｐ ｃｈａｔｓ,"  # noqa
+        "\nａｎｄ Ｉｌｌ ｃａｔｅｉｆｙ ｙｏｕｒ ｍｅｓｓａｇｅｓ！！！₍˄·͈༝·͈˄₎ "
+    )
 
-    bot.send_chat_action(message_user_id, ChatAction.TYPING)
+    username, user_id, message_text = get_meta_from_update(update)
 
-    bot.sendMessage(chat_id=message_user_id, parse_mode=ParseMode.MARKDOWN,
-                    text='Ｔｏ ｕｓｅ ｉｎｗｉｎｅ ｑｗｕｅｒｉｅｓ， ｐｗｅａｓｅ ｕｓｅ ｔｈｅ ｆｏｗｗｏｗｉｎｇ ｆｏｒｍａｔ:'
-                    '\n＠ｃａｔｅｉｆｙ＿ｂｏｔ ｙｏｕｒｍｅｓｓａｇｅｔｅｘｔｈｅｒｅ'
-                    '\nｔｈｅｎ ｓｅｗｅｃｔ ｙｏｕｒ ｏｐｔｉｏｎ ｆｗｏｍ ｔｈｅ ｄｗｏｐｄｏｗｎ ｍｅｎｕ！！ o3o;;'
-                    '\n\nＹｏｕ ｃａｎ ａｌｓｏ ｊｕｓｔ ｐｗｉｖａｔｅｗｙ ｍｅｓｓａｇｅ ｍｅ， ｏｒ ｒｅｐｗｙ ｔｏ ｍｅ ｉｎ ｇｗｏｕｐ ｃｈａｔｓ,'
-                    '\nａｎｄ Ｉｌｌ ｃａｔｅｉｆｙ ｙｏｕｒ ｍｅｓｓａｇｅｓ！！！₍˄·͈༝·͈˄₎ '
-                    )
-
+    bot.send_chat_action(user_id, ChatAction.TYPING)
+    bot.sendMessage(
+        chat_id=user_id, parse_mode=ParseMode.MARKDOWN,
+        text=HELP_COMMAND_TEXT
+    )
