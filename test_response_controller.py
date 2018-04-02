@@ -33,5 +33,21 @@ class TestResponseController(TestCase):
             generate_cate_response(query_text), expected
         )
 
+    def test_cate_response_does_not_cateify_emoji(self):
+        query_text = "🥕🍆🗑️"
+        expected = "🥕🍆🗑️"
+
+        self.assertEqual(
+            generate_cate_response(query_text), expected
+        )
+
+    def test_cate_response_does_not_cateify_mixed_out_of_range(self):
+        query_text = "The 🥕 live outsidé of the code path米？"
+        expected = "Ｔｈｅ　🥕　ｌｉｖｅ　ｏｕｔｓｉｄé　ｏｆ　ｔｈｅ　ｃｏｄｅ　ｐａｔｈ米？"
+
+        self.assertEqual(
+            generate_cate_response(query_text), expected
+        )
+
     def tearDown(self):
         pass
