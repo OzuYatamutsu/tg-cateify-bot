@@ -102,3 +102,5 @@ ENV/
 
 # Log
 cateify_bot.log
+
+*.swp

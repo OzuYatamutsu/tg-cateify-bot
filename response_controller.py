@@ -4,10 +4,10 @@ from helpers import inline_query_transform
 from requests import get
 
 
-def generate_cate_response(query_text: str) -> list:
+def generate_cate_response(query_text: str) -> str:
     """
     Generates a fixed-width version of the query_text.
-    Returns a properly formatted inline query response.
+    Returns a string; must be passed into helpers.inline_query_transform before being used.
     """
 
     try:
