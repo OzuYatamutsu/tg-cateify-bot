@@ -1,4 +1,5 @@
 language: python3
+sudo: enabled
 python:
     - 3.6
 install:
