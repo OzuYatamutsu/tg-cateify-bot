@@ -5,8 +5,8 @@ from requests import get
 
 def generate_cate_response(query_text: str) -> str:
     """
-    Generates a fixed-width version of the query_text.
-    Returns a string; must be passed into helpers.inline_query_transform before being used.
+    Generates a fixed-width version of the query_text. Returns a string;
+    must be passed into helpers.inline_query_transform before being used.
     """
 
     try:
@@ -21,4 +21,3 @@ def generate_cate_response(query_text: str) -> str:
         log.error(e)
 
     return result
-
