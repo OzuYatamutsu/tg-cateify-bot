@@ -1,4 +1,5 @@
-# tg-cateify-bot [![Build Status](https://travis-ci.org/OzuYatamutsu/tg-cateify-bot.svg?branch=master)](https://travis-ci.org/OzuYatamutsu/tg-cateify-bot 
+# Cateifybot
+[![Build Status](https://travis-ci.org/OzuYatamutsu/tg-cateify-bot.svg?branch=master)](https://travis-ci.org/OzuYatamutsu/tg-cateify-bot 
 Yo! It's a Telegram bot that queries the [cate-as-a-service](https://github.com/OzuYatamutsu/cate-as-a-service) API.
 
 It takes text that `looks like this` and responds with text that `ｌｏｏｋｓ　ｌｉｋｅ　ｔｈｉｓ`.
