@@ -39,7 +39,7 @@ def _onboard_config():
         config_contents = f.read()
 
     print("Hiya. Looks like you're startin' cateify-bot for the first time.")
-    bot_token: str = input("What's your bot token? ")
+    bot_token = input("What's your bot token? ")
 
     with open('config.py', 'w') as f:
         f.write(config_contents.format(api_key=bot_token))
