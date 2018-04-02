@@ -1,30 +1,11 @@
 from logger import log
-from telegram.ext import Updater, InlineQueryHandler
-from response_controller import generate_cate_response
 from config import API_KEY
-from helpers import inline_query_transform
-
-
-def on_inline_query(bot, update) -> None:
-    """
-    Forward the query to the controller method and respond
-    """
-
-    query_username: str = update.effective_user.username
-    query_user_id = str(update.effective_user.id)
-    query_text: str = update.inline_query.query
-
-    if not query_text:
-        update.inline_query.answer(inline_query_transform(''))
-        return
-
-    log.debug('Cateifying: "{text}" from user {username} ({id})'.format(
-        text=query_text, username=query_username, id=query_user_id
-    ))
-
-    update.inline_query.answer(inline_query_transform(
-        generate_cate_response(query_text=update.inline_query.query)
-    ))
+from handlers import (
+    on_command_start, on_command_help, on_message_text, on_inline_query
+)
+from telegram.ext import (
+    Updater, InlineQueryHandler, MessageHandler, CommandHandler, Filters
+)
 
 
 def start():
@@ -35,6 +16,13 @@ def start():
 
     # Register inline query handler
     dp.add_handler(InlineQueryHandler(on_inline_query))
+
+    # Register command handlers
+    dp.add_handler(CommandHandler("start", on_command_start))
+    dp.add_handler(CommandHandler("help", on_command_help))
+
+    # Register text message handler
+    dp.add_handler(MessageHandler(Filters.text, on_message_text))
 
     log.info("Bot ready, dood! Connected as {username} (with ID {id}).".format(
         username=bot.bot.username,
