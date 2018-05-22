@@ -13,7 +13,10 @@ def log_cateify(func):
         username, user_id, *_ = get_meta_from_update(update)
 
         # Don't log query for privacy
-        log.debug(f'Cateifying text from user {username} ({user_id})')
+        log.debug('Cateifying text from user {username} ({user_id})'.format(
+            username=username,
+            user_id=user_id
+        ))
         return func(bot, update)
     return _log_wrapper
 
