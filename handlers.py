@@ -5,7 +5,7 @@ from telegram import ParseMode, ChatAction
 
 
 @log_cateify
-def on_inline_query(bot, update) -> None:
+def on_inline_query(update, context) -> None:
     """
     Forward the query to the controller method and respond
     """
@@ -22,12 +22,13 @@ def on_inline_query(bot, update) -> None:
 
 
 @log_cateify
-def on_message_text(bot, update) -> None:
+def on_message_text(update, context) -> None:
     """
     Forward the message text to the controller method and respond
     """
 
     username, user_id, message_text = get_meta_from_update(update)
+    bot = context.bot
 
     if not message_text:
         return
@@ -42,7 +43,7 @@ def on_message_text(bot, update) -> None:
 
 
 @log_command
-def on_command_start(bot, update):
+def on_command_start(update, context):
     """
     Welcomes the user to Cateify bot!
     """
@@ -55,6 +56,7 @@ def on_command_start(bot, update):
     )
 
     username, user_id, message_text = get_meta_from_update(update)
+    bot = context.bot
 
     bot.send_chat_action(user_id, ChatAction.TYPING)
     bot.sendSticker(
@@ -67,7 +69,7 @@ def on_command_start(bot, update):
 
 
 @log_command
-def on_command_help(bot, update):
+def on_command_help(update, context):
     """
     Provides the user with information about the bot.
     """
@@ -81,6 +83,7 @@ def on_command_help(bot, update):
     )
 
     username, user_id, message_text = get_meta_from_update(update)
+    bot = context.bot
 
     bot.send_chat_action(user_id, ChatAction.TYPING)
     bot.sendMessage(

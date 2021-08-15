@@ -11,7 +11,7 @@ from telegram.ext import (
 def start():
     """Connects to Telegram and starts the bot."""
 
-    bot = Updater(token=API_KEY)
+    bot = Updater(token=API_KEY, use_context=True)
     dp = bot.dispatcher
 
     # Register inline query handler

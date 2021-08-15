@@ -9,15 +9,12 @@ def log_cateify(func):
     when we're calling into the response controller).
     """
 
-    def _log_wrapper(bot, update):
+    def _log_wrapper(update, context):
         username, user_id, *_ = get_meta_from_update(update)
 
         # Don't log query for privacy
-        log.debug('Cateifying text from user {username} ({user_id})'.format(
-            username=username,
-            user_id=user_id
-        ))
-        return func(bot, update)
+        log.debug(f'Cateifying text from user {username} ({user_id})')
+        return func(update, context)
     return _log_wrapper
 
 
